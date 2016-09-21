@@ -12,6 +12,10 @@ class Application {
         $this->_app = new App($config['app']);
     }
 
+    public static function setup() {
+        self::getInstance();
+    }
+
     public static function getInstance() {
         if (!self::$_instance) {
             self::$_instance = new Application();

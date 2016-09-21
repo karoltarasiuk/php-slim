@@ -8,6 +8,30 @@ class ApplicationRoutes {
     protected static $_app = null;
     protected static $_addedRoutes = [];
 
+    public static function setup() {
+        // Define app routes
+        ApplicationRoutes::addRoute('', function (Request $request, Response $response, $args) {
+            return $this->view->render($response, 'index.phtml');
+        });
+
+        $helloRoute = function (Request $request, Response $response, $args) {
+            return $this->view->render($response, 'hello.phtml', [
+                'name' => array_key_exists('name', $args) ? $args['name'] : 'stranger'
+            ]);
+        };
+        ApplicationRoutes::addRoute('/hello', $helloRoute);
+        ApplicationRoutes::addRoute('/hello/{name}', $helloRoute);
+
+        ApplicationRoutes::addRoute('/some/rubbish/in.json', function (Request $request, Response $response, $args) {
+            $newResponse = $response->withHeader('Content-type', 'application/json');
+            $body = $newResponse->getBody();
+            $body->write(json_encode([
+                'some' => 'rubbish'
+            ]));
+            return $newResponse;
+        });
+    }
+
     /**
      * I assume that route string is without trailing slash. This slash will be
      * added here, e.g. if you pass '/home', and the default version folder is
@@ -20,7 +44,7 @@ class ApplicationRoutes {
      * @param string    $route
      * @param function  $callback
      */
-    public static function addRoute($route, $callback) {
+    protected static function addRoute($route, $callback) {
 
         if (!self::$_app) {
             self::$_app = Application::getSlimApp();
@@ -46,25 +70,3 @@ class ApplicationRoutes {
         return $frontControllerConfig['DEFAULT_VERSION_FOLDER'];
     }
 }
-
-// Define app routes
-ApplicationRoutes::addRoute('', function (Request $request, Response $response, $args) {
-    return $this->view->render($response, 'index.phtml');
-});
-
-$helloRoute = function (Request $request, Response $response, $args) {
-    return $this->view->render($response, 'hello.phtml', [
-        'name' => array_key_exists('name', $args) ? $args['name'] : 'stranger'
-    ]);
-};
-ApplicationRoutes::addRoute('/hello', $helloRoute);
-ApplicationRoutes::addRoute('/hello/{name}', $helloRoute);
-
-ApplicationRoutes::addRoute('/some/rubbish/in.json', function (Request $request, Response $response, $args) {
-    $newResponse = $response->withHeader('Content-type', 'application/json');
-    $body = $newResponse->getBody();
-    $body->write(json_encode([
-        'some' => 'rubbish'
-    ]));
-    return $newResponse;
-});
