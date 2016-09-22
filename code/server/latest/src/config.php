@@ -10,8 +10,8 @@ class ApplicationConfig {
                     'addContentLengthHeader' => false,
                     'db' => [
                         'host' => 'localhost',
-                        'user' => '',
-                        'pass' => '',
+                        'user' => 'root',
+                        'pass' => 'root',
                         'dbname' => 'php-slim'
                     ]
                 ]

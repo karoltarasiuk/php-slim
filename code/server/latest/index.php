@@ -11,6 +11,7 @@ include_once __DIR__ . '/src/config.php';
 include_once __DIR__ . '/src/application.php';
 include_once __DIR__ . '/src/routes.php';
 include_once __DIR__ . '/src/dependencies.php';
+include_once __DIR__ . '/src/database.php';
 
 Application::setup();
 ApplicationRoutes::setup();
