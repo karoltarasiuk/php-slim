@@ -30,6 +30,14 @@ class ApplicationRoutes {
             ]));
             return $newResponse;
         });
+
+        ApplicationRoutes::addRoute('/db/fetchall.json', function (Request $request, Response $response, $args) {
+            $newResponse = $response->withHeader('Content-type', 'application/json');
+            $body = $newResponse->getBody();
+            $all = Database::fetchAll('SELECT * FROM `users` WHERE `username` LIKE "%test%"');
+            $body->write(json_encode($all));
+            return $newResponse;
+        });
     }
 
     /**
